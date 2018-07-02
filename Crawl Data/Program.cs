@@ -16,8 +16,12 @@ namespace Crawl_Data
         public void Execute()
         {   //TODO
             //implement insert db in function RefreshCandleData
+            // lay du lien nen 1phut
             //Program._dataRefresher.RefreshCandleData(Program.CoinsToBacktest, (x) => Program.WriteColoredLine(x, ConsoleColor.Green), Mynt.Core.Enums.Period.Minute).Wait();
-            Program._dataRefresher.getAllPrice((x) => Program.WriteColoredLine(x, ConsoleColor.Green)).Wait();
+            //lay gia cua tat ca cac coin tren 1 san
+            //Program._dataRefresher.getAllPrice((x) => Program.WriteColoredLine(x, ConsoleColor.Green)).Wait();
+            //lay volume
+            Program._dataRefresher.getAskBid(Program.CoinsToBacktest,(x) => Program.WriteColoredLine(x, ConsoleColor.Green)).Wait();
         }
     }
 

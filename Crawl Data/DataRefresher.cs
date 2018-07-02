@@ -112,6 +112,41 @@ namespace Crawl_Data
             }
         }
 
+        public async Task getAskBid(List<string> coinsToRefresh, Action<string> callback)
+        {
+            List<string> writtenFiles = new List<string>();
+
+            foreach (var coinToBuy in coinsToRefresh)
+            {
+
+                var basePath = AppDomain.CurrentDomain.BaseDirectory;
+                var jsonPath = Path.Combine(GetDataDirectory(), $"{coinToBuy}volume.json");
+
+                // Delete an existing file.
+                if (File.Exists(jsonPath)) File.Delete(jsonPath);
+                var orderBook = await _api.GetOrderBook(coinToBuy);
+                var ask = orderBook.Asks;
+                var bid = orderBook.Bids;
+
+                // Add the last bit in...
+                //totalCandles.AddRange(candles);
+               // totalCandles = totalCandles.OrderBy(x => x.Timestamp).ToList();
+
+                // Write all the text.
+                File.WriteAllText(jsonPath, JsonConvert.SerializeObject(ask));
+                writtenFiles.Add(jsonPath);
+
+                callback($"{DateTime.UtcNow}: Refreshed data for {coinToBuy}...");
+            }
+
+            // Delete everything that's not refreshed
+            foreach (FileInfo fi in new DirectoryInfo(GetDataDirectory()).EnumerateFiles())
+            {
+                if (!writtenFiles.Contains(fi.FullName))
+                    File.Delete(fi.FullName);
+            }
+        }
+
         private TimeSpan GetCacheAge()
         {
             string dataFolder = Path.GetDirectoryName(GetJsonFilePath("dummy-dummy"));
