@@ -16,11 +16,17 @@ namespace Crawl_Data
         {   //TODO
             //implement insert db in function RefreshCandleData
             // lay du lien nen 1phut
-            Program._dataRefresher.RefreshCandleData(Program.CoinsToBacktest, (x) => Program.WriteColoredLine(x, ConsoleColor.Green), Mynt.Core.Enums.Period.Minute).Wait();
+           // Program._dataRefresher.RefreshCandleData(Program.CoinsToBacktest, (x) => Program.WriteColoredLine(x, ConsoleColor.Green), Mynt.Core.Enums.Period.Minute).Wait();
             //lay gia cua tat ca cac coin tren 1 san
             //Program._dataRefresher.getAllPrice((x) => Program.WriteColoredLine(x, ConsoleColor.Green)).Wait();
             //lay volume
             //Program._dataRefresher.getAskBid(Program.CoinsToBacktest, (x) => Program.WriteColoredLine(x, ConsoleColor.Green)).Wait();
+            for(int i =0;i<1000;i++){
+            PersonService person = new PersonService();
+
+person.GetById("asd");
+Console.WriteLine(i);
+            }
         }
     }
 
@@ -46,7 +52,7 @@ namespace Crawl_Data
         public ScheduledJobRegistry()
         {
             var job = new MyJob { };
-            JobManager.AddJob(job, s => s.WithName("MyJob").ToRunOnceAt(DateTime.Now.AddSeconds(3)).AndEvery(1).Minutes());
+            JobManager.AddJob(job, s => s.WithName("MyJob").ToRunEvery(1).Seconds());
 
             // var job01 = new TestJob01 {};
             // var job02 = new TestJob02 {};
@@ -75,7 +81,7 @@ namespace Crawl_Data
             DatabaseInitializer();
 
             JobManager.Initialize(new ScheduledJobRegistry());
-
+//JobManager.UseUtcTime();
             JobManager.JobException += info =>
             {
                 Console.WriteLine($"Error occurred in job: {info.Name}, {info.Exception}");
@@ -104,6 +110,7 @@ namespace Crawl_Data
             ServiceProvider = new ServiceCollection()
                             .AddTransient<ApplicationContext>()
                             .AddSingleton<IPersonService, PersonService>()
+                            .AddSingleton<ICandleService, CandleService>()
                             .AddTransient<IDatabaseInitializer, DatabaseInitializer>()
                             .AddSingleton<IConfiguration>(Configuration)
                             .BuildServiceProvider();

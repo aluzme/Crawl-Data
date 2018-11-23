@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Crawl_Data.Models;
+using Mynt.Core.Models;
 
 namespace Crawl_Data.Services
 {
-    public interface IPersonService
+    public interface ICandleService
     {
-        List<Person> GetAll();
+        List<Candle> GetAll();
 
-        void GetById(string id);
     }
 }
